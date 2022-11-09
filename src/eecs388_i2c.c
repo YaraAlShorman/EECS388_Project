@@ -3,11 +3,9 @@
 #include "eecs388_lib.h"
 #include "metal/i2c.h"
 
-
 struct metal_i2c *i2c;
-uint8_t bufWrite[9];
+uint8_t bufWrite[5];
 uint8_t bufRead[1];
-
 
 // The entire setup sequence
 // Do not modify the following function!
@@ -64,9 +62,8 @@ void set_up_I2C(){
 
 
 void breakup(int bigNum, uint8_t* low, uint8_t* high){
-    /*
-        Write Task 1 code here
-    */
+    low = *low & 0xFF;
+    high = *low >> 8;
 }
 
 void steering(int angle){
