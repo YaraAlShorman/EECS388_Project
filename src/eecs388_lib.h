@@ -64,6 +64,7 @@
 //Servo
 #define SERVOMIN  155 // This is the 'minimum' pulse length count (out of 4096)
 #define SERVOMAX  355 // This is the 'maximum' pulse length count (out of 4096)
+#define SERVO_PERIOD 20000
 
 #define MIN_PULSE_WIDTH       800
 #define MAX_PULSE_WIDTH       2200
@@ -71,6 +72,8 @@
 #define FREQUENCY             50
 
 #define I2C_BAUDRATE        100000
+
+
 
 void set_up_I2C();
 

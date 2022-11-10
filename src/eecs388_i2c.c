@@ -62,14 +62,16 @@ void set_up_I2C(){
 
 
 void breakup(int bigNum, uint8_t* low, uint8_t* high){
-    low = *low & 0xFF;
-    high = *low >> 8;
+    *low = bigNum & 0xFF;
+    *high = *low >> 8;
 }
 
 void steering(int angle){
-    /*
-        Write Task 2 code here
-    */
+    gpio_write(PIN_19, ON);
+    int cycle = getServoCycle(angle);
+    delay_usec(cycle);
+    gpio_write(PIN_19, OFF);
+    delay_usec(SERVO_PERIOD - cycle);
 }
 
 void stopMotor(){
@@ -94,7 +96,7 @@ void driveReverse(uint8_t speedFlag){
 int main()
 {
     set_up_I2C();
-
+    steering(45);
     /*
         Add function calls here to complete task 6
     */
