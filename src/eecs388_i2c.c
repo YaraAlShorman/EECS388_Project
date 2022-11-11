@@ -67,17 +67,24 @@ void breakup(int bigNum, uint8_t* low, uint8_t* high){
 }
 
 void steering(int angle){
-    gpio_write(PIN_19, ON);
+    i2c = metal_i2c_get_device(0);
+
+    u_int8_t* low = 0;
+    u_int8_t* high = 0;
     int cycle = getServoCycle(angle);
-    delay_usec(cycle);
-    gpio_write(PIN_19, OFF);
-    delay_usec(SERVO_PERIOD - cycle);
+    breakup(cycle, low, high);
+    printf(*low);
+    printf(*high);
+    bufWrite[0] = PCA9685_LED0_ON_L;
+    bufWrite[1] = 0;
+    bufWrite[2] = 0;
+    bufWrite[3] = *low;
+    bufWrite[4] = *high;
+    metal_i2c_write(i2c, PCA9685_I2C_ADDRESS, bufWrite, 5, METAL_I2C_STOP_DISABLE);
 }
 
 void stopMotor(){
-    /*
-        Write Task 3 code here
-    */
+    
 }
 
 void driveForward(uint8_t speedFlag){
@@ -96,7 +103,9 @@ void driveReverse(uint8_t speedFlag){
 int main()
 {
     set_up_I2C();
-    steering(45);
+    steering(45); // Test added by yara
+    steering(-45); // Test added by yara
+    steering(0); // Test added by yara
     /*
         Add function calls here to complete task 6
     */
