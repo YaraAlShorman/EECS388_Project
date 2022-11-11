@@ -62,8 +62,8 @@ void set_up_I2C(){
 
 
 void breakup(int bigNum, uint8_t* low, uint8_t* high){
-    *low = bigNum & 0xFF;
-    *high = *low >> 8;
+    *low = bigNum & 0x00FF;
+    *high = bigNum >> 8;
 }
 
 void steering(int angle){
@@ -73,18 +73,29 @@ void steering(int angle){
     u_int8_t* high = 0;
     int cycle = getServoCycle(angle);
     breakup(cycle, low, high);
-    printf(*low);
-    printf(*high);
+    // printf(*low);
+    // printf(*high);
     bufWrite[0] = PCA9685_LED0_ON_L;
     bufWrite[1] = 0;
     bufWrite[2] = 0;
     bufWrite[3] = *low;
     bufWrite[4] = *high;
-    metal_i2c_write(i2c, PCA9685_I2C_ADDRESS, bufWrite, 5, METAL_I2C_STOP_DISABLE);
+    metal_i2c_transfer(i2c, PCA9685_I2C_ADDRESS, bufWrite, 5, bufRead, 1);
 }
 
 void stopMotor(){
-    
+    i2c = metal_i2c_get_device(0);
+
+    u_int8_t* low = 0;
+    u_int8_t* high = 0;
+    breakup(280, low, high);
+
+    bufWrite[0] = PCA9685_LED1_ON_L;
+    bufWrite[1] = *low;
+    bufWrite[2] = *high;
+    bufWrite[3] = 0;
+    bufWrite[4] = 0;
+    metal_i2c_transfer(i2c, PCA9685_I2C_ADDRESS, bufWrite, 5, bufRead, 1); 
 }
 
 void driveForward(uint8_t speedFlag){
@@ -103,6 +114,8 @@ void driveReverse(uint8_t speedFlag){
 int main()
 {
     set_up_I2C();
+    
+    stopMotor();
     steering(45); // Test added by yara
     steering(-45); // Test added by yara
     steering(0); // Test added by yara
@@ -164,7 +177,7 @@ int main()
 /* Motor config/stop. This will cause a second beep upon completion */
 /*
     -Task 3: using bufWrite, bufRead, breakup(), and
-    and metal_i2c_transfer(), implement the funcion made
+    and metal_i2c_transfer(), implement the function made
     above. This function configures the motor by 
     writing a value of 280 to the motor.
 
