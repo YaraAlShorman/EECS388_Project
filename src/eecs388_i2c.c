@@ -79,7 +79,7 @@ void steering(int angle){
 }
 
 void stopMotor(){
-    bufWrite[0] = PCA9685_LED0_ON_L;
+    bufWrite[0] = PCA9685_LED1_ON_L;
     bufWrite[1] = 0;
     bufWrite[2] = 0;
 
@@ -92,9 +92,6 @@ void driveForward(uint8_t speedFlag){
     bufWrite[0] = PCA9685_LED1_ON_L ; 
     bufWrite[1] = 0;
     bufWrite[2] = 0;
-
-    breakup(cycle, &bufWrite[3], &bufWrite[4]);
-    printf(cycle);
 
     if(speedFlag == 1) breakup(313, &bufWrite[3], &bufWrite[4]);
     if(speedFlag == 2) breakup(315, &bufWrite[3], &bufWrite[4]);
