@@ -67,34 +67,25 @@ void breakup(int bigNum, uint8_t* low, uint8_t* high){
 }
 
 void steering(int angle){
-    i2c = metal_i2c_get_device(0);
-
-    u_int8_t* low = 0;
-    u_int8_t* high = 0;
     int cycle = getServoCycle(angle);
-    breakup(cycle, low, high);
-    // printf(*low);
-    // printf(*high);
-    bufWrite[0] = PCA9685_LED0_ON_L;
+
+    bufWrite[0] = PCA9685_LED0_ON_L + 4; // or add 4 for LED 1
     bufWrite[1] = 0;
     bufWrite[2] = 0;
-    bufWrite[3] = *low;
-    bufWrite[4] = *high;
+
+    breakup(cycle, &bufWrite[3], &bufWrite[4]);
+    printf(cycle);
     metal_i2c_transfer(i2c, PCA9685_I2C_ADDRESS, bufWrite, 5, bufRead, 1);
 }
 
 void stopMotor(){
     i2c = metal_i2c_get_device(0);
 
-    u_int8_t* low = 0;
-    u_int8_t* high = 0;
-    breakup(280, low, high);
+    bufWrite[0] = PCA9685_LED0_ON_L;
+    bufWrite[1] = 0;
+    bufWrite[2] = 0;
 
-    bufWrite[0] = PCA9685_LED1_ON_L;
-    bufWrite[1] = *low;
-    bufWrite[2] = *high;
-    bufWrite[3] = 0;
-    bufWrite[4] = 0;
+    breakup(280, &bufWrite[3], &bufWrite[4]);
     metal_i2c_transfer(i2c, PCA9685_I2C_ADDRESS, bufWrite, 5, bufRead, 1); 
 }
 
@@ -116,6 +107,7 @@ int main()
     set_up_I2C();
     
     stopMotor();
+
     steering(45); // Test added by yara
     steering(-45); // Test added by yara
     steering(0); // Test added by yara
