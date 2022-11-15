@@ -79,8 +79,6 @@ void steering(int angle){
 }
 
 void stopMotor(){
-    i2c = metal_i2c_get_device(0);
-
     bufWrite[0] = PCA9685_LED0_ON_L;
     bufWrite[1] = 0;
     bufWrite[2] = 0;
@@ -90,6 +88,7 @@ void stopMotor(){
 }
 
 void driveForward(uint8_t speedFlag){
+
     bufWrite[0] = PCA9685_LED1_ON_L ; 
     bufWrite[1] = 0;
     bufWrite[2] = 0;
@@ -106,9 +105,15 @@ void driveForward(uint8_t speedFlag){
 }
 
 void driveReverse(uint8_t speedFlag){
-    /*
-        Write task 5 code here
-    */
+    bufWrite[0] = PCA9685_LED1_ON_L;
+    bufWrite[1] = 0;
+    bufWrite[2] = 0;
+
+    if (speedFlag == 1){breakup(267, &bufWrite[3], &bufWrite[4]);}
+    if (speedFlag == 2){breakup(265, &bufWrite[3], &bufWrite[4]);}
+    if (speedFlag == 3){breakup(263, &bufWrite[3], &bufWrite[4]);
+    }
+    metal_i2c_transfer(i2c, PCA9685_I2C_ADDRESS, bufWrite, 5, bufRead, 1); 
 }
 
 
@@ -117,14 +122,24 @@ int main()
     set_up_I2C();
     
     delay(2000);
-    steering(45); // Test added by yara
+    steering(0);
+
     delay(2000);
-    steering(-45); // Test added by yara
+    driveForward(1);
+
     delay(2000);
-    steering(0); // Test added by yara
-    /*
-        Add function calls here to complete task 6
-    */
+    steering(20);
+
+    delay(2000);
+    stopMotor();
+
+    delay(2000);
+    driveReverse(1);
+
+    delay(2000);
+    steering(0);
+    
+    delay(2000);
     stopMotor();
 }
 
