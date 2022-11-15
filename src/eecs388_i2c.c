@@ -69,7 +69,7 @@ void breakup(int bigNum, uint8_t* low, uint8_t* high){
 void steering(int angle){
     int cycle = getServoCycle(angle);
 
-    bufWrite[0] = PCA9685_LED0_ON_L + 4; // or add 4 for LED 1
+    bufWrite[0] = PCA9685_LED0_ON_L; // or add 4 for LED 1
     bufWrite[1] = 0;
     bufWrite[2] = 0;
 
