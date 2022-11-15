@@ -106,14 +106,13 @@ int main()
 {
     set_up_I2C();
     
-    stopMotor();
-
     steering(45); // Test added by yara
     steering(-45); // Test added by yara
     steering(0); // Test added by yara
     /*
         Add function calls here to complete task 6
     */
+    stopMotor();
 }
 
 
