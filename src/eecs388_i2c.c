@@ -106,8 +106,11 @@ int main()
 {
     set_up_I2C();
     
+    delay(2000);
     steering(45); // Test added by yara
+    delay(2000);
     steering(-45); // Test added by yara
+    delay(2000);
     steering(0); // Test added by yara
     /*
         Add function calls here to complete task 6
